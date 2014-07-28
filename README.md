@@ -17,3 +17,8 @@ DuiLib怎么使用这个DuiLib_Ext就怎么使用，它只是DuiLib的一个维�
 ###联系###
 Email: shaoyuan1943@gmail.com
 QQ: 84977043
+
+###2014-07-29 更新###
+1. 添加IconControl控件
+2. 添加窗口阴影
+3. 添加Gif动画  
