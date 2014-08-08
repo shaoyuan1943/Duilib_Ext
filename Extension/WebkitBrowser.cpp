@@ -4,10 +4,10 @@
 
 class WebkitBrowserWnd : public DuiLib::CWindowWnd, protected wkeBufHandler
 {
-	friend class WebkirBrowserUI;
+	friend class WebkitBrowserUI;
 public:
 	WebkitBrowserWnd();
-	void Init(WebkirBrowserUI* pOwer);
+	void Init(WebkitBrowserUI* pOwer);
 	LPCTSTR GetWindowClassName() const;
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	void OnFinalMessage(HWND hWnd);
@@ -25,7 +25,7 @@ public:
 	void OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	void OnIMEStartCompostion(UINT uMsg, WPARAM wParam, LPARAM lParam);
 protected:
-	WebkirBrowserUI* pOwner;
+	WebkitBrowserUI* pOwner;
 	bool bIsInited;
 	wkeWebView webView;
 };
@@ -60,7 +60,6 @@ void WebkitBrowserWnd::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	RECT rcClip;
 	PAINTSTRUCT ps;
 	HDC hDc = BeginPaint(m_hWnd, &ps);
-	//webView->setDirty(true);
 	::GetClipBox(hDc, &rcClip);
 	RECT rcClient;
 	::GetClientRect(m_hWnd, &rcClient);
@@ -278,7 +277,7 @@ LRESULT WebkitBrowserWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-void WebkitBrowserWnd::Init(WebkirBrowserUI* pOwer)
+void WebkitBrowserWnd::Init(WebkitBrowserUI* pOwer)
 {
 	this->pOwner = pOwer;
 	RECT pos = pOwner->GetPos();
@@ -298,54 +297,54 @@ void WebkitBrowserWnd::onBufUpdated(const HDC hdc, int x, int y, int cx, int cy)
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-WebkirBrowserUI::WebkirBrowserUI() :pWebViewWnd(nullptr)
+WebkitBrowserUI::WebkitBrowserUI() :pWebViewWnd(nullptr)
 {
 	pWebViewWnd = new WebkitBrowserWnd;
 	assert(pWebViewWnd);
 }
 
-LPCTSTR WebkirBrowserUI::GetClass() const
+LPCTSTR WebkitBrowserUI::GetClass() const
 {
 	return L"WebkitBrowserUI";
 }
 
-void WebkirBrowserUI::Init()
+void WebkitBrowserUI::Init()
 {
 	pWebViewWnd->Init(this);
 	m_pManager->SetTimer(this, EVENT_TIEM_ID, 100);
 }
 
-void WebkirBrowserUI::SetPos(RECT rc)
+void WebkitBrowserUI::SetPos(RECT rc)
 {
 	CControlUI::SetPos(rc);
 	::SetWindowPos(pWebViewWnd->GetHWND(), NULL, rc.left, rc.top, rc.right - rc.left,
 		rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-void WebkirBrowserUI::DoEvent(TEventUI& event)
+void WebkitBrowserUI::DoEvent(TEventUI& event)
 {
 	if (event.Type == UIEVENT_TIMER)
 		OnTimer((UINT_PTR)event.wParam);
 }
 
-void WebkirBrowserUI::OnTimer(UINT_PTR idEvent)
+void WebkitBrowserUI::OnTimer(UINT_PTR idEvent)
 {
 	if (idEvent != EVENT_TIEM_ID)
 		return;
 	pWebViewWnd->webView->tick();
 }
 
-void WebkirBrowserUI::NavigationURL(const wchar_t* url)
+void WebkitBrowserUI::NavigationURL(const wchar_t* url)
 {
 	pWebViewWnd->webView->loadURL(url);
 }
 
-void WebkirBrowserUI::NavigationFile(const wchar_t* fileName)
+void WebkitBrowserUI::NavigationFile(const wchar_t* fileName)
 {
 	pWebViewWnd->webView->loadFile(fileName);
 }
 
-void WebkirBrowserUI::Back()
+void WebkitBrowserUI::Back()
 {
 	if (pWebViewWnd->webView->canGoBack())
 	{
@@ -353,7 +352,7 @@ void WebkirBrowserUI::Back()
 	}
 }
 
-void WebkirBrowserUI::Forward()
+void WebkitBrowserUI::Forward()
 {
 	if (pWebViewWnd->webView->canGoForward())
 	{
@@ -361,12 +360,19 @@ void WebkirBrowserUI::Forward()
 	}
 }
 
-void WebkirBrowserUI::Refresh()
+void WebkitBrowserUI::Refresh()
 {
 	pWebViewWnd->webView->reload();
 }
 
-void WebkirBrowserUI::SetCookieEnabeled(bool enabled)
+void WebkitBrowserUI::SetCookieEnabeled(bool enabled)
 {
 	pWebViewWnd->webView->setCookieEnabled(enabled);
+}
+
+void WebkitBrowserUI::Test()
+{
+	jsExecState es = pWebViewWnd->webView->globalExec();
+	jsValue func = jsGetGlobal(es, "changeLabelText");
+	jsCallGlobal(es, func, nullptr, 0);
 }

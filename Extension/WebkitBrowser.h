@@ -15,11 +15,11 @@ public:
 	virtual void SetCookieEnabeled(bool enabled) = 0;
 };
 
-class WebkirBrowserUI : public DuiLib::CControlUI, public IWebkitBrowser
+class WebkitBrowserUI : public DuiLib::CControlUI, public IWebkitBrowser
 {
 	friend class WebkitBrowserWnd;
 public:
-	WebkirBrowserUI();
+	WebkitBrowserUI();
 	virtual LPCTSTR GetClass() const;
 	void Init();
 	virtual void SetPos(RECT rc);
@@ -33,6 +33,8 @@ public:
 	virtual void Back();
 	virtual void Forward();
 	virtual void SetCookieEnabeled(bool enabled);
+
+	void Test();
 private:
 	WebkitBrowserWnd* pWebViewWnd;
 };
