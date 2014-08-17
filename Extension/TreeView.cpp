@@ -17,8 +17,7 @@ public:
 protected:
 	CTreeViewCtrlEx treeControl;
 	TreeViewUI* pOwner;
-	CTreeItem selectItem;
-	CTreeItem rootItem;
+	CImageList imageList;
 };
 
 TreeViewWnd::TreeViewWnd() 
@@ -78,10 +77,15 @@ void TreeViewWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam)
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 TreeViewUI::TreeViewUI()
-	:pTreeViewWnd(nullptr)
+	:pTreeViewWnd(nullptr), isIcon(false)
 {
 	pTreeViewWnd = new TreeViewWnd;
 	assert(pTreeViewWnd);
+}
+
+TreeViewUI::~TreeViewUI()
+{
+	pTreeViewWnd->PostMessage(WM_CLOSE);
 }
 
 LPCTSTR TreeViewUI::GetClass() const
@@ -156,4 +160,47 @@ CTreeItem TreeViewUI::GetSelectedItem()
 void TreeViewUI::GetItemText(HTREEITEM hItem, LPTSTR lptstr, int iLength)
 {
 	pTreeViewWnd->treeControl.GetItemText(hItem, lptstr, iLength);
+}
+
+void TreeViewUI::SetIcon(bool isIcon)
+{
+	this->isIcon = isIcon;
+	CImageList imagelist = pTreeViewWnd->treeControl.GetImageList(0);
+	if (imagelist.m_hImageList == nullptr)
+	{
+		pTreeViewWnd->imageList.Create(16,16,ILC_COLOR32,1,1);
+		pTreeViewWnd->treeControl.SetImageList((HIMAGELIST)(pTreeViewWnd->imageList),TVSIL_NORMAL);
+	}
+}
+
+bool TreeViewUI::GetIcon()
+{
+	return isIcon;
+}
+
+void TreeViewUI::AddIcon(HICON icon)
+{
+	assert(icon);
+	pTreeViewWnd->imageList.AddIcon(icon);
+}
+
+void TreeViewUI::SetItemStateImage(CTreeItem hItem, unsigned int iImage, unsigned int iSelectedImage)
+{
+	CImageList imagelist = pTreeViewWnd->treeControl.GetImageList(0);
+	if (imagelist.m_hImageList == nullptr)
+	{
+		return;
+	}
+	
+	if (hItem.m_hTreeItem == nullptr)
+	{
+		return;
+	}
+
+	hItem.SetImage(iImage, iSelectedImage);
+}
+
+void TreeViewUI::SetScrollPos(int iBar, int iPos, BOOL bRedraw /* = TRUE */)
+{
+	pTreeViewWnd->treeControl.SetScrollPos(iBar, iPos, bRedraw);
 }

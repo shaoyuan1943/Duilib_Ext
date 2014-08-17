@@ -303,6 +303,11 @@ WebkitBrowserUI::WebkitBrowserUI() :pWebViewWnd(nullptr)
 	assert(pWebViewWnd);
 }
 
+WebkitBrowserUI::~WebkitBrowserUI()
+{
+	pWebViewWnd->SendMessage(WM_CLOSE);
+}
+
 LPCTSTR WebkitBrowserUI::GetClass() const
 {
 	return L"WebkitBrowserUI";

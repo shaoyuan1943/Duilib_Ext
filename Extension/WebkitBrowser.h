@@ -20,6 +20,7 @@ class WebkitBrowserUI : public DuiLib::CControlUI, public IWebkitBrowser
 	friend class WebkitBrowserWnd;
 public:
 	WebkitBrowserUI();
+	~WebkitBrowserUI();
 	virtual LPCTSTR GetClass() const;
 	void Init();
 	virtual void SetPos(RECT rc);
