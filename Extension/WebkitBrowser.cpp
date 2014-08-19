@@ -273,7 +273,7 @@ LRESULT WebkitBrowserWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	if (!bHandled)
-		return DefWindowProc(this->GetHWND(), uMsg, wParam, lParam);
+		return __super::HandleMessage(uMsg, wParam, lParam);
 	return 0;
 }
 

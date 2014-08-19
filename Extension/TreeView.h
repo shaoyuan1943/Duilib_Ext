@@ -30,7 +30,6 @@ public:
 	unsigned int GetCount();
 	void ExpandItem(HTREEITEM hItem);
 
-	void SetIcon(bool isIcon);
 	bool GetIcon();
 	void AddIcon(HICON icon);
 	void SetItemStateImage(CTreeItem hItem, unsigned int iImage = 0, unsigned int iSelectedImage = 1);

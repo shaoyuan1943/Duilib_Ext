@@ -47,7 +47,7 @@ LRESULT TreeViewWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	if (!bHandled)
-		return DefWindowProc(this->GetHWND(), uMsg, wParam, lParam);
+		return __super::HandleMessage(uMsg, wParam, lParam);
 	return 0;
 }
 
@@ -162,17 +162,6 @@ void TreeViewUI::GetItemText(HTREEITEM hItem, LPTSTR lptstr, int iLength)
 	pTreeViewWnd->treeControl.GetItemText(hItem, lptstr, iLength);
 }
 
-void TreeViewUI::SetIcon(bool isIcon)
-{
-	this->isIcon = isIcon;
-	CImageList imagelist = pTreeViewWnd->treeControl.GetImageList(0);
-	if (imagelist.m_hImageList == nullptr)
-	{
-		pTreeViewWnd->imageList.Create(16,16,ILC_COLOR32,1,1);
-		pTreeViewWnd->treeControl.SetImageList((HIMAGELIST)(pTreeViewWnd->imageList),TVSIL_NORMAL);
-	}
-}
-
 bool TreeViewUI::GetIcon()
 {
 	return isIcon;
@@ -181,6 +170,12 @@ bool TreeViewUI::GetIcon()
 void TreeViewUI::AddIcon(HICON icon)
 {
 	assert(icon);
+	if (!isIcon)
+	{
+		isIcon = true;
+		pTreeViewWnd->imageList.Create(16,16,ILC_COLOR32,1,1);
+		pTreeViewWnd->treeControl.SetImageList((HIMAGELIST)(pTreeViewWnd->imageList),TVSIL_NORMAL);
+	}
 	pTreeViewWnd->imageList.AddIcon(icon);
 }
 
