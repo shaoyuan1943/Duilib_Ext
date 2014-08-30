@@ -157,5 +157,5 @@ void DateTimeUI::SetCalStyle(DWORD dwStyle)
 
 DWORD DateTimeUI::GetCalStyle()
 {
-	m_pDateTimeWnd->m_DateTimeCtrl.GetMonthCalStyle();
+	return m_pDateTimeWnd->m_DateTimeCtrl.GetMonthCalStyle();
 }
